@@ -3,6 +3,7 @@ import 'package:counter/views/counter_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// coverage:ignore-start
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -11,6 +12,7 @@ void main() {
     ),
   );
 }
+// coverage:ignore-end
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
