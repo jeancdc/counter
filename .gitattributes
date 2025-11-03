@@ -1,0 +1,6 @@
+# Priority to Dart files
+*.dart linguist-detectable=true
+
+# Ignore CMake files
+*.cmake linguist-detectable=false
+CMakeLists.txt linguist-detectable=false
