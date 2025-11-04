@@ -1,16 +1,37 @@
-# counter
+# Counter
 
-A new Flutter project.
+A simple Flutter MVVM counter application using Provider for state management.
 
-## Getting Started
+## Table of Contents
 
-This project is a starting point for a Flutter application.
+- [Install](#install)
+- [Usage](#usage)
+- [Testing](#testing)
 
-A few resources to get you started if this is your first Flutter project:
+## Install
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Clone the repository and install dependencies:
+```shell
+git clone https://github.com/jeancdc/counter.git
+cd counter
+flutter pub get
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Usage
+
+Run the app in debug mode:
+```shell
+flutter run
+```
+
+Build a release version:
+```shell
+flutter build apk
+```
+
+## Testing
+
+Run unit and widget tests with coverage:
+```
+flutter test --coverage
+```
