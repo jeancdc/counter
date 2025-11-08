@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# --- Config ---
+LCOV_FILE="coverage/lcov.info"
+BADGE_OUTPUT="badges/coverage_badge.svg"
+LOG_PREFIX="[coverage]"
+
+# --- Colors ---
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
+YELLOW="\033[1;33m"
+RESET="\033[0m"
+
+echo -e "${CYAN}${LOG_PREFIX}${RESET} Running coverage update..."
+
+# Ensure coverage folder exists
+mkdir -p coverage
+
+# Run tests with coverage
+echo -e "${CYAN}${LOG_PREFIX}${RESET} Running flutter test --coverage..."
+if ! flutter test --coverage > /dev/null 2>&1; then
+  echo -e "${RED}${LOG_PREFIX}${RESET} Tests failed. Badge not updated."
+  exit 0
+fi
+
+# Generate badge
+echo -e "${CYAN}${LOG_PREFIX}${RESET} Generating badge..."
+if ! dart run tools/lcov2badge.dart "$LCOV_FILE" "$BADGE_OUTPUT"; then
+  echo -e "${RED}${LOG_PREFIX}${RESET} Could not generate badge."
+  exit 0
+fi
+
+# If the file is not tracked by git yet (first time), consider amend it
+if ! git ls-files --error-unmatch "$BADGE_OUTPUT" > /dev/null 2>&1 ; then
+  echo -e "${GREEN}${LOG_PREFIX}${RESET} Badge is new (untracked). Will amend commit to include it."
+else
+  # The file is tracked; check if it changed compared to HEAD
+  if ! git diff --quiet -- "$BADGE_OUTPUT" ; then
+    echo -e "${GREEN}${LOG_PREFIX}${RESET} Badge file changed. Will amend commit to update it."
+  else
+    echo -e "${GREEN}${LOG_PREFIX}${RESET} No change in badge. Nothing to amend."
+    exit 0
+  fi
+fi
+
+# Stage changed badge
+git add "$BADGE_OUTPUT"
+
+# Amend previous commit without modifying message
+echo -e "${YELLOW}${LOG_PREFIX}${RESET} Amending commit to include updated badge..."
+git commit --amend --no-edit > /dev/null 2>&1
+
+echo -e "${GREEN}${LOG_PREFIX}${RESET} Coverage badge updated and commit amended successfully."
